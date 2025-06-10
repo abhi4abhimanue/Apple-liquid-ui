@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Glass UI Kit</title>
+    <link rel="stylesheet" href="liquid-glass-kit.css">
+</head>
+<body>
+    <h1>Liquid Glass UI Kit - Buttons</h1>
+
+    <section class="component-section">
+        <h2>Primary Buttons</h2>
+        <button class="lg-button lg-button-primary">Primary Button</button>
+        <button class="lg-button lg-button-primary" disabled>Primary Disabled</button>
+    </section>
+
+    <section class="component-section">
+        <h2>Secondary Buttons</h2>
+        <button class="lg-button lg-button-secondary">Secondary Button</button>
+        <button class="lg-button lg-button-secondary" disabled>Secondary Disabled</button>
+    </section>
+
+    <section class="component-section">
+        <h2>Text/Quiet Buttons</h2>
+        <button class="lg-button lg-button-text">Text Button</button>
+        <button class="lg-button lg-button-text" disabled>Text Disabled</button>
+    </section>
+
+    <section class="component-section">
+        <h2>Input Fields</h2>
+        <div class="lg-input-group">
+            <label for="text-input-default">Text Input</label>
+            <input type="text" id="text-input-default" class="lg-input" placeholder="Enter text here...">
+        </div>
+        <div class="lg-input-group">
+            <label for="text-input-focus">Text Input (Focus - for demo)</label>
+            <input type="text" id="text-input-focus" class="lg-input lg-input-focus-demo" placeholder="This input is styled as focused">
+        </div>
+        <div class="lg-input-group">
+            <label for="password-input">Password Input</label>
+            <input type="password" id="password-input" class="lg-input" placeholder="Enter password">
+        </div>
+        <div class="lg-input-group">
+            <label for="text-input-disabled">Text Input (Disabled)</label>
+            <input type="text" id="text-input-disabled" class="lg-input" placeholder="Disabled input" disabled>
+        </div>
+        <div class="lg-input-group">
+            <label for="textarea-default">Textarea</label>
+            <textarea id="textarea-default" class="lg-textarea" rows="4" placeholder="Enter multiple lines of text..."></textarea>
+        </div>
+        <div class="lg-input-group">
+            <label for="textarea-disabled">Textarea (Disabled)</label>
+            <textarea id="textarea-disabled" class="lg-textarea" rows="4" placeholder="Disabled textarea" disabled></textarea>
+        </div>
+    </section>
+
+    <section class="component-section">
+        <h2>Cards</h2>
+        <div class="lg-card-container">
+            <div class="lg-card">
+                <div class="lg-card-header">
+                    <h3>Card Title</h3>
+                </div>
+                <div class="lg-card-body">
+                    <p>This is some sample content for the liquid glass card. It can contain text, images, or other elements.</p>
+                    <p>The glass effect is applied to the background of this card.</p>
+                </div>
+                <div class="lg-card-footer">
+                    <button class="lg-button lg-button-secondary">Read More</button>
+                </div>
+            </div>
+
+            <div class="lg-card">
+                <div class="lg-card-body">
+                    <p>A simpler card with just body content. The liquid glass effect provides a unique background.</p>
+                    <img src="https://via.placeholder.com/300x100?text=Sample+Image" alt="Placeholder Image" style="max-width: 100%; border-radius: 8px; margin-top: 10px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SVG Filter Definition -->
+    <svg style="display: none;">
+        <filter id="liquid-glass-filter" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5" result="turbulenceBase"/>
+            <!-- Add slight variation for hover/focus if possible, or control baseFrequency/numOctaves via CSS custom props if supported by filters -->
+            <feGaussianBlur in="turbulenceBase" stdDeviation="3" result="blurredTurbulence"/>
+
+            <feSpecularLighting in="blurredTurbulence" surfaceScale="5" specularConstant="0.8" specularExponent="100" lighting-color="white" result="specularLight">
+                <fePointLight x="-200" y="-200" z="300" />
+            </feSpecularLighting>
+            <feComposite in="specularLight" operator="in" in2="blurredTurbulence" result="specularMap"/> <!-- Use 'in' to make light appear on turbulence ridges -->
+
+            <feDisplacementMap in="SourceGraphic" in2="blurredTurbulence" scale="10" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+
+            <!-- Composite specular highlight on top of displaced image -->
+            <feComposite in="displaced" in2="specularMap" operator="arithmetic" k1="0" k2="1" k3="1" k4="0.1" result="finalEffect"/>
+        </filter>
+    </svg>
+</body>
+</html>

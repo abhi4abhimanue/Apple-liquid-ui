@@ -1,66 +1,82 @@
-# Liquid Glass UI Effect
+# Liquid Glass UI Kit (Phase 1)
 
-This repository contains the HTML and CSS to replicate a liquid glass/glassmorphism UI effect, inspired by the "liquid-glass-effect-macos" project by lucasromerodb.
+This is a general-purpose UI kit based on a "Liquid Glass" design principle. It aims to provide a set of common web components with a unique, modern aesthetic.
 
-## Effect Description
+This kit is currently in **Phase 1 of development**, including the following foundational components:
+*   Buttons (Primary, Secondary, Text)
+*   Input Fields (Text, Password, Textarea)
+*   Cards
 
-The effect simulates a frosted glass appearance with a liquid-like distortion. It uses:
-- HTML for the structure.
-- CSS for styling, including `backdrop-filter` for blur.
-- An SVG filter (`<filter id="glass-distortion">`) embedded in the HTML for the turbulence, lighting, and displacement effects that create the "liquid" look.
+## Demo & Showcase
+
+Open the `liquid-glass-kit.html` file in your web browser to see a live demonstration of the components.
 
 ## How to Use
 
-1.  **HTML Structure:**
-    Include the following structure in your HTML file:
+1.  **Link the CSS:**
+    Include the `liquid-glass-kit.css` file in the `<head>` of your HTML document:
+    ```html
+    <link rel="stylesheet" href="liquid-glass-kit.css">
+    ```
+
+2.  **Include SVG Filter:**
+    The liquid glass effect relies on an SVG filter. You **must** include the following SVG block somewhere in your HTML body (e.g., right before the closing `</body>` tag). It is styled with `display: none;` so it won't be visually rendered.
 
     ```html
-    <div class="liquidGlass-wrapper">
-        <div class="liquidGlass-effect"></div>
-        <div class="liquidGlass-tint"></div>
-        <div class="liquidGlass-shine"></div>
-        <div class="liquidGlass-text">
-            <!-- Your content here (text, SVG, images) -->
-            Example Content
-        </div>
-    </div>
-
-    <!-- Place this SVG filter definition somewhere in your HTML (e.g., end of body) -->
+    <!-- SVG Filter Definition -->
     <svg style="display: none;">
-        <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
-            <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5" result="turbulence"/>
-            <feComponentTransfer in="turbulence" result="mapped">
-                <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
-                <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
-                <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
-            </feComponentTransfer>
-            <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap" />
-            <feSpecularLighting in="softMap" surfaceScale="5" specularConstant="1" specularExponent="100" lighting-color="white" result="specLight">
+        <filter id="liquid-glass-filter" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5" result="turbulenceBase"/>
+            <feGaussianBlur in="turbulenceBase" stdDeviation="3" result="blurredTurbulence"/>
+            <feSpecularLighting in="blurredTurbulence" surfaceScale="5" specularConstant="0.8" specularExponent="100" lighting-color="white" result="specularLight">
                 <fePointLight x="-200" y="-200" z="300" />
             </feSpecularLighting>
-            <feComposite in="specLight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage"/>
-            <feDisplacementMap in="SourceGraphic" in2="softMap" scale="150" xChannelSelector="R" yChannelSelector="G"/>
+            <feComposite in="specularLight" operator="in" in2="blurredTurbulence" result="specularMap"/>
+            <feDisplacementMap in="SourceGraphic" in2="blurredTurbulence" scale="10" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+            <feComposite in="displaced" in2="specularMap" operator="arithmetic" k1="0" k2="1" k3="1" k4="0.1" result="finalEffect"/>
         </filter>
     </svg>
     ```
 
-2.  **CSS Styling:**
-    Link the `style.css` file (or copy the styles into your main stylesheet). The key classes are:
-    - `.liquidGlass-wrapper`
-    - `.liquidGlass-effect`
-    - `.liquidGlass-tint`
-    - `.liquidGlass-shine`
-    - `.liquidGlass-text`
+3.  **Use Component Classes:**
+    Refer to `liquid-glass-kit.html` for examples of how to structure the HTML for each component using the provided CSS classes (e.g., `.lg-button`, `.lg-input`, `.lg-card`, and their variations).
 
-    You can customize the appearance by modifying these styles. For example, the `.liquidGlass-wrapper.button` class in the provided `style.css` gives a specific button look.
+    **Example - Primary Button:**
+    ```html
+    <button class="lg-button lg-button-primary">Primary Button</button>
+    ```
 
-## Demonstration
+    **Example - Input Field:**
+    ```html
+    <div class="lg-input-group">
+        <label for="my-input">My Input</label>
+        <input type="text" id="my-input" class="lg-input" placeholder="Enter text...">
+    </div>
+    ```
 
-Open the `index.html` file in this repository in a web browser to see a simple button demonstrating the effect.
+    **Example - Card:**
+    ```html
+    <div class="lg-card">
+        <div class="lg-card-header"><h3>Card Title</h3></div>
+        <div class="lg-card-body"><p>Card content goes here.</p></div>
+    </div>
+    ```
 
-## Credits
+## Customization Notes
 
-This effect is based on the work by **lucasromerodb**.
-Original repository: [https://github.com/lucasromerodb/liquid-glass-effect-macos](https://github.com/lucasromerodb/liquid-glass-effect-macos)
+*   The primary SVG filter is `id="liquid-glass-filter"`. You can try to adjust its parameters (`baseFrequency`, `stdDeviation`, `scale`, etc.) within the `<svg>` block to alter the intensity or characteristics of the effect.
+*   CSS variables for filter parameters are not used in this version but could be a future enhancement for easier customization via CSS.
 
-Please ensure to credit the original author if you use or adapt this effect.
+## Future Development (Phase 2 and beyond)
+
+This UI kit will be expanded with more components, including:
+*   Modals
+*   Navigation Bars
+*   Checkboxes & Radio Buttons
+*   Dropdowns/Selects
+*   And more.
+
+Stay tuned for updates!
+
+---
+*This UI kit was developed based on a "liquid glass" design concept, inspired by various modern UI trends.*

@@ -1,0 +1,394 @@
+/* Basic Body Styling for Demo */
+body {
+    padding: 20px;
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #222;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align sections to the start */
+    gap: 20px; /* Gap between h1 and first section */
+}
+
+.component-section {
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    width: 100%; /* Make sections take full width */
+    max-width: 800px; /* Optional: constrain max width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.component-section h2 {
+    margin-top: 0;
+    color: #99ddff;
+}
+
+.component-section button,
+.component-section .lg-button { /* Ensure specificity for disabled state */
+    margin-right: 10px;
+    margin-bottom: 10px; /* Add margin for buttons wrapping to next line */
+}
+
+/* General Liquid Glass Button Styles */
+.lg-button {
+    position: relative;
+    display: inline-flex; /* Use inline-flex for alignment */
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    padding: 0.75em 1.5em;
+    border-radius: 50px; /* Pill shape */
+    border: none;
+    overflow: hidden; /* Crucial for the effect */
+    cursor: pointer;
+    color: white;
+    background-color: transparent; /* Base background, effect layers will sit on top */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    text-decoration: none; /* For anchor tags styled as buttons */
+    font-size: 1rem;
+}
+
+.lg-button:focus-visible { /* Modern focus indicator */
+    outline: 2px solid #66ccff;
+    outline-offset: 2px;
+}
+
+/* Effect Layers Common Structure */
+.lg-button::before, /* Main glass effect + distortion */
+.lg-button::after   /* Tint + Shine */ {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit; /* Ensure these layers follow button's border-radius */
+    pointer-events: none; /* Allow clicks to go through to the button */
+}
+
+/* Main Glass Effect Layer (SVG filter + backdrop for some) */
+.lg-button::before {
+    z-index: 0;
+    /* The filter is applied here. For complex effects, direct background might be needed if backdrop-filter is too slow or unsupported in all contexts. */
+}
+
+/* Tint & Shine Layer */
+.lg-button::after {
+    z-index: 1;
+    /* Shine and tint will be defined per button type */
+}
+
+.lg-button .lg-button-text-content { /* If we need a specific span for text to ensure it's above effects */
+    position: relative;
+    z-index: 2;
+}
+
+
+/* --- Primary Button --- */
+.lg-button-primary {
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.lg-button-primary::before {
+    background: rgba(100, 180, 255, 0.1); /* Slight base color for the filter to interact with */
+    backdrop-filter: blur(4px); /* Glassmorphism base */
+    filter: url(#liquid-glass-filter);
+}
+
+.lg-button-primary::after {
+    background: linear-gradient(135deg, rgba(220, 240, 255, 0.3) 0%, rgba(180, 220, 255, 0.1) 100%); /* Tint */
+    box-shadow: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.4), /* Inner shine */
+                inset -1px -1px 2px 0 rgba(100, 150, 200, 0.3);
+}
+
+.lg-button-primary:hover:not([disabled]) {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 100, 200, 0.3);
+}
+.lg-button-primary:active:not([disabled]) {
+    transform: translateY(0px) scale(0.98);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Secondary Button --- */
+.lg-button-secondary {
+    color: #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.lg-button-secondary::before {
+    background: rgba(150, 150, 180, 0.1); /* More subtle base */
+    backdrop-filter: blur(3px);
+    filter: url(#liquid-glass-filter); /* Can use the same filter or a slightly different one */
+}
+
+.lg-button-secondary::after {
+    background: linear-gradient(135deg, rgba(200, 200, 220, 0.2) 0%, rgba(150, 150, 180, 0.05) 100%); /* Tint */
+    box-shadow: inset 1px 1px 1px 0 rgba(220, 220, 255, 0.2),
+                inset -1px -1px 1px 0 rgba(100, 100, 120, 0.2);
+}
+
+.lg-button-secondary:hover:not([disabled]) {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow: 0 4px 12px rgba(0, 50, 100, 0.2);
+}
+.lg-button-secondary:active:not([disabled]) {
+    transform: translateY(0px) scale(0.99);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+}
+
+
+/* --- Text/Quiet Button --- */
+.lg-button-text {
+    color: #aaddee; /* Light blue text */
+    background-color: transparent;
+    border-radius: 8px; /* Less pronounced radius for text buttons */
+    padding: 0.5em 0.8em;
+    overflow: visible; /* Text buttons might not need overflow hidden unless effect is strong */
+}
+
+/* For text button, effect might be very subtle or only on ::before */
+.lg-button-text::before {
+    /* Initially no background or filter, apply on hover/focus */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+}
+
+.lg-button-text:hover:not([disabled])::before,
+.lg-button-text:focus-visible:not([disabled])::before {
+    opacity: 1;
+    background: rgba(100, 180, 255, 0.05); /* Very subtle base */
+    backdrop-filter: blur(2px);
+    /* Consider a much simpler or no SVG filter for text buttons if performance is a concern */
+    /* filter: url(#liquid-glass-filter); */ /* Potentially too much for a text button */
+}
+/* No strong ::after tint/shine for text button to keep it minimal */
+.lg-button-text:hover:not([disabled]) {
+    color: #cceeff;
+    background-color: rgba(100,180,255,0.1); /* Slight background on hover */
+}
+.lg-button-text:active:not([disabled]) {
+    background-color: rgba(100,180,255,0.15);
+}
+
+
+/* --- Disabled State --- */
+.lg-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    color: #999; /* Muted text color for disabled */
+    box-shadow: none;
+}
+
+/* Remove interactive effects for disabled buttons */
+.lg-button[disabled]::before,
+.lg-button[disabled]::after {
+    filter: none;
+    backdrop-filter: none;
+    background: rgba(128,128,128,0.1); /* Simple greyed out background */
+    box-shadow: none;
+}
+.lg-button-primary[disabled]::after {
+     background: rgba(128,128,128,0.2);
+}
+.lg-button-secondary[disabled]::after {
+     background: rgba(128,128,128,0.15);
+}
+.lg-button-text[disabled] {
+    background-color: transparent;
+    color: #777;
+}
+.lg-button-text[disabled]::before {
+    opacity: 0; /* No hover effect */
+}
+
+/* --- Input Fields & Textarea --- */
+.lg-input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.lg-input-group label {
+    margin-bottom: 5px;
+    color: #bbb;
+    font-size: 0.9em;
+}
+
+.lg-input,
+.lg-textarea {
+    position: relative;
+    padding: 10px 15px;
+    border: 1px solid #555; /* Subtle border for default state */
+    border-radius: 12px;    /* Consistent rounded corners */
+    background-color: rgba(20, 20, 30, 0.5); /* Dark, slightly transparent base */
+    color: #eee;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden; /* Needed if pseudo-elements are used for effects inside */
+}
+
+/* Common pseudo-element for glass effect, applied on focus */
+.lg-input::before,
+.lg-textarea::before {
+    content: "";
+    position: absolute;
+    inset: -2px; /* Slightly outside to cover border area or create glow */
+    z-index: -1; /* Behind the input's content area */
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    background: rgba(100, 180, 255, 0.1); /* Base for the filter */
+}
+
+.lg-input:hover:not([disabled]),
+.lg-textarea:hover:not([disabled]) {
+    border-color: #777;
+}
+
+/* Focus State - Activate the glass effect */
+.lg-input:focus,
+.lg-textarea:focus,
+.lg-input.lg-input-focus-demo { /* For manual focus styling demo */
+    border-color: transparent; /* Hide the standard border, let effect ::before show */
+    outline: none; /* Remove default browser outline, we'll use the ::before */
+    box-shadow: 0 0 15px rgba(100, 180, 255, 0.3); /* Outer glow */
+}
+
+.lg-input:focus::before,
+.lg-textarea:focus::before,
+.lg-input.lg-input-focus-demo::before {
+    opacity: 1;
+    backdrop-filter: blur(3px);
+    filter: url(#liquid-glass-filter);
+    /* Adjust SVG filter params via CSS vars if possible and needed for inputs,
+       or use a dedicated, more subtle SVG filter. For now, using the main one. */
+    /* Example: --svg-turbulence-freq: 0.005 0.005; --svg-displacement-scale: 5; */
+    border: 1px solid rgba(100, 180, 255, 0.5); /* Effect border */
+}
+
+/* Placeholder text style */
+.lg-input::placeholder,
+.lg-textarea::placeholder {
+    color: #888;
+    opacity: 1; /* Firefox fix */
+}
+
+/* Disabled State */
+.lg-input[disabled],
+.lg-textarea[disabled] {
+    cursor: not-allowed;
+    background-color: rgba(50, 50, 50, 0.5);
+    color: #777;
+    border-color: #444;
+    box-shadow: none;
+}
+
+.lg-input[disabled]::before,
+.lg-textarea[disabled]::before {
+    opacity: 0; /* No glass effect on disabled */
+}
+
+.lg-input[disabled]::placeholder,
+.lg-textarea[disabled]::placeholder {
+    color: #666;
+}
+
+/* Textarea specific */
+.lg-textarea {
+    resize: vertical; /* Allow vertical resize, disable horizontal */
+    min-height: 80px;
+}
+
+/* --- Card Component --- */
+.lg-card-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow cards to wrap to next line */
+    gap: 20px; /* Spacing between cards */
+}
+
+.lg-card {
+    position: relative;
+    border-radius: 16px; /* Softer, larger radius for cards */
+    overflow: hidden;    /* Essential for pseudo-element effects */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: #e0e0e0; /* Default text color for card content */
+    /* width: 320px; */ /* This line is replaced */
+    flex: 1 1 300px; /* Allow cards to grow and shrink, with a basis of 300px */
+    min-width: 280px; /* Prevent cards from becoming too narrow before wrapping */
+    max-width: 100%; /* Ensure card does not overflow its flex container if basis is large */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+.lg-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Pseudo-elements for the glass effect */
+.lg-card::before, /* Main glass effect (SVG filter + backdrop) */
+.lg-card::after    /* Tint/Shine overlay */ {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none; /* Allow interactions with card content */
+}
+
+.lg-card::before {
+    z-index: -2; /* Furthest back */
+    background: rgba(50, 70, 90, 0.2); /* Base color for filter interaction */
+    backdrop-filter: blur(5px);       /* Base glassmorphism blur */
+    filter: url(#liquid-glass-filter);  /* Apply the SVG filter */
+    /* Consider adjusting filter parameters for cards if needed, e.g., less turbulence */
+    /* --svg-turbulence-freq: 0.005 0.005; --svg-displacement-scale: 8; */
+}
+
+.lg-card::after {
+    z-index: -1; /* On top of ::before, but behind content */
+    background: linear-gradient(160deg, rgba(180, 220, 255, 0.15) 0%, rgba(100, 150, 200, 0.05) 100%); /* Subtle tint */
+    /* Optional: Subtle inner shine if desired, might be too much for a card */
+    /* box-shadow: inset 1px 1px 2px rgba(255,255,255,0.1); */
+}
+
+/* Card Content Styling */
+.lg-card-header,
+.lg-card-body,
+.lg-card-footer {
+    padding: 20px;
+    position: relative; /* Ensure content is above pseudo-elements */
+    z-index: 1;
+}
+
+.lg-card-header {
+    border-bottom: 1px solid rgba(200, 220, 255, 0.1);
+}
+.lg-card-header h3 {
+    margin: 0;
+    color: #ffffff;
+}
+
+.lg-card-body p {
+    line-height: 1.6;
+    margin-top: 0;
+}
+.lg-card-body p:last-child {
+    margin-bottom: 0;
+}
+
+.lg-card-footer {
+    margin-top: auto; /* Push footer to the bottom if card flex direction is column */
+    border-top: 1px solid rgba(200, 220, 255, 0.1);
+    padding-top: 15px;
+}
+
+/* Ensure buttons inside cards use the defined styles */
+.lg-card .lg-button {
+    font-size: 0.9rem; /* Slightly smaller buttons in cards */
+    padding: 0.6em 1.2em;
+}
