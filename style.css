@@ -1,0 +1,77 @@
+/* LIQUID GLASS STYLES */
+.liquidGlass-wrapper {
+  position: relative;
+  display: flex;
+  font-weight: 600;
+  overflow: hidden;
+  color: black;
+  cursor: pointer;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2); /* Adjusted for smoother hover on wrapper */
+}
+
+.liquidGlass-effect {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  backdrop-filter: blur(3px);
+  filter: url(#glass-distortion);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.liquidGlass-tint {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.liquidGlass-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5),
+    inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.liquidGlass-text {
+  z-index: 3;
+  font-size: 1rem; /* Adjusted for a more generic button example */
+  color: white;   /* Changed to white for better visibility on dark/glassy backgrounds */
+  padding: 1em 1.5em; /* Added padding to the text itself for better spacing */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* BASIC BODY STYLING FOR DEMO */
+body {
+  padding: 20px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #333; /* Simple dark background for contrast */
+  font-family: sans-serif;
+}
+
+/* EXAMPLE BUTTON STYLING (can be adapted from original or simplified) */
+.liquidGlass-wrapper.button {
+  border-radius: 50px; /* Example: Make it pill-shaped */
+  /* Add any specific hover effects for the button here if needed */
+}
+
+.liquidGlass-wrapper.button:hover {
+  transform: scale(1.05); /* Example hover effect */
+}
+
+/* Ensure the inner effect divs also respect the parent's border-radius */
+.liquidGlass-wrapper.button > .liquidGlass-effect,
+.liquidGlass-wrapper.button > .liquidGlass-tint,
+.liquidGlass-wrapper.button > .liquidGlass-shine {
+  border-radius: inherit; /* Inherit border-radius from parent */
+}
